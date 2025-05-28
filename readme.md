@@ -112,3 +112,41 @@ root
 com isso é possível ver quais são as venerabilidades e como faz para corrigir
 - trivy image node:20
 - trivy image node:20-alpine3.21 
+
+
+Perfeito. Aqui está o fluxo completo apenas com a tag `v1`:
+
+---
+
+## Push Docker Hub Image (tag `v1`)
+
+1. **Login no Docker Hub**
+
+```bash
+docker login
+```
+
+2. **Build da imagem com a tag `v1` diretamente no repositório do Docker Hub**
+
+```bash
+docker build -t ryazero/widget-server:v1 .
+```
+
+3. **Push da imagem para o Docker Hub**
+
+```bash
+docker push ryazero/widget-server:v1
+```
+
+---
+
+✔️ Simples e direto, sem necessidade de usar `docker tag`.
+
+
+aws configure
+
+AWS Access Key ID[None]: example
+AWS Secret Access Key: example
+Default region name [None]: us-east-2
+
+

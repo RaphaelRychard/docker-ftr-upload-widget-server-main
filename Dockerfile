@@ -1,55 +1,60 @@
-# só trocar de node:20 para node:20-alpine3.21 teve reeducação de 1GB
-
-#----------------- base ---------------------------
-FROM node:20.18 AS base 
+# --------------------- BASE -------------------------
+# Imagem base com Node + pnpm instalado globalmente
+FROM node:20-alpine3.21 AS base
 
 RUN npm i -g pnpm
 
-# ---------------- dependencies --------------------------
+
+# ------------------ DEPENDENCIES --------------------
+# Instala apenas as dependências
 FROM base AS dependencies
 
-# Diretório de trabalho
+# Diretório de trabalho dentro do container
 WORKDIR /usr/src/app
 
-# arquivo de origem do projeto
-# COPY arquivo-origem arquivo-origem destino
+# Copia arquivos de definição de dependências
 COPY package.json pnpm-lock.yaml ./
 
-# instala dependências do pnpm 
+# Instala dependências (inclusive devDependencies)
 RUN pnpm install
 
-# ---------------- build --------------------------
+
+# --------------------- BUILD ------------------------
+# Etapa de build da aplicação
 FROM base AS build
 
 WORKDIR /usr/src/app
 
-# copiar tudo da no src para nosso container
+# Copia todo o código fonte
 COPY . .
+
+# Copia node_modules da etapa de dependências
 COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 
+# Build do projeto (gera ./dist)
 RUN pnpm build
+
+# Remove dependências de desenvolvimento
 RUN pnpm prune --prod
 
-# ---------------- deploy --------------------------
+
+# -------------------- DEPLOY ------------------------
+# Imagem extremamente enxuta e segura usando distroless
 FROM gcr.io/distroless/nodejs20-debian12 AS deploy
 
+# Define usuário não root para segurança (USER 1000)
 USER 1000
 
+# Define diretório de trabalho dentro do container
 WORKDIR /usr/src/app
 
+# Copia apenas os arquivos necessários para execução
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/package.json ./package.json
 
-## Declara envs
-ENV CLOUDFLARE_ACCOUNT_ID="2cb33b802e9522d2c64f6b76b15b967f"
-ENV CLOUDFLARE_ACCESS_KEY_ID="05708ee58d6b9373210e9998b52267f5"
-ENV CLOUDFLARE_SECRET_ACCESS_KEY="5dffed58f105438f003184a2368ddf26fe4669f58b1cec97970138dd0c619f49"
-ENV CLOUDFLARE_BUCKET="saf-nest-clean-test"
-ENV CLOUDFLARE_PUBLIC_URL="https://pub-8c2c18b4943a48909c1618bc96377625.r2.dev"
-
-# Expõem a porta da minha aplicação
+# Expõe a porta que a aplicação roda dentro do container
 EXPOSE 3333
 
-# executara esse comando no final e segura o container
+# Comando que roda a aplicação no container
 CMD ["dist/server.mjs"]
