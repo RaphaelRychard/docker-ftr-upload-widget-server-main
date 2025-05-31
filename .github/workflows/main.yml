@@ -31,4 +31,4 @@ jobs:
       run: |
         docker build -t widget-server:v3 .
         docker tag widget-server:v3 905418176922.dkr.ecr.us-east-2.amazonaws.com/rocketseat/widget-server:v3
-        docker push 905418176922.dkr.ecr.us-east-2.amazonaws.com/rocketseat/widget-server
+        docker push 905418176922.dkr.ecr.us-east-2.amazonaws.com/rocketseat/widget-server:v3
