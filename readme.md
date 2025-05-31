@@ -148,5 +148,3 @@ aws configure
 AWS Access Key ID[None]: example
 AWS Secret Access Key: example
 Default region name [None]: us-east-2
-
-
