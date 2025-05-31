@@ -151,8 +151,8 @@ Default region name [None]: us-east-2
 
 
 ## Fluxo
-aws configure - configurar credencias
-aws ecr - logar no ecr
-build da imagem
-*taggeamento da image
-push da image
+- [x] aws configure - configurar credencias
+- [ ] aws ecr - logar no ecr
+- [ ] build da imagem
+- [ ] *taggeamento da image
+- [ ] push da image
