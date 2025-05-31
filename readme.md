@@ -152,7 +152,7 @@ Default region name [None]: us-east-2
 
 ## Fluxo
 - [x] aws configure - configurar credencias
-- [ ] aws ecr - logar no ecr
+- [x] aws ecr - logar no ecr
 - [ ] build da imagem
 - [ ] *taggeamento da image
 - [ ] push da image
