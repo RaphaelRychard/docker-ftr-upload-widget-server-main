@@ -40,7 +40,7 @@ RUN pnpm prune --prod
 
 # -------------------- DEPLOY ------------------------
 # Imagem extremamente enxuta e segura usando distroless
-FROM gcr.io/distroless/nodejs22-debian12 AS deploy
+FROM node:22-alpine3.22 AS deploy
 
 # Define usuário não root para segurança (USER 1000)
 USER 1000
@@ -57,4 +57,4 @@ COPY --from=build /usr/src/app/package.json ./package.json
 EXPOSE 3333
 
 # Comando que roda a aplicação no container
-CMD ["dist/server.mjs"]
+CMD ["node", "dist/server.mjs"]
