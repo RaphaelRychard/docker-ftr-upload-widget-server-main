@@ -40,7 +40,7 @@ RUN pnpm prune --prod
 
 # -------------------- DEPLOY ------------------------
 # Imagem extremamente enxuta e segura usando distroless
-FROM gcr.io/distroless/nodejs22-debian12 AS deploy
+FROM gcr.io/distroless/nodejs20-debian12 AS deploy
 
 # Define usuário não root para segurança (USER 1000)
 USER 1000
