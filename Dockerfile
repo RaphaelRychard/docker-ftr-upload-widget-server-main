@@ -40,7 +40,7 @@ RUN pnpm prune --prod
 
 # -------------------- DEPLOY ------------------------
 # Imagem extremamente enxuta e segura usando distroless
-FROM cgr.dev/chainguard/node AS deploy
+FROM cgr.dev/chainguard/22.16.0-slim AS deploy
 
 # Define usuário não root para segurança (USER 1000)
 USER 1000
