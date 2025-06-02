@@ -1,6 +1,6 @@
 # --------------------- BASE -------------------------
 # Imagem base com Node + pnpm instalado globalmente
-FROM node:22 AS base
+FROM node:20 AS base
 
 RUN npm i -g pnpm
 
@@ -38,7 +38,7 @@ RUN pnpm prune --prod
 
 # -------------------- DEPLOY ------------------------
 # Imagem extremamente enxuta e segura usando distroless
-FROM node:22-alpine3.20 AS deploy
+FROM node:20-alpine3.18 AS deploy
 
 # Define usuário não root para segurança (USER 1000)
 USER 1000
