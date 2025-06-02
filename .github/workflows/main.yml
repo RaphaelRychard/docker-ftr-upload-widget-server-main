@@ -12,13 +12,13 @@ jobs:
     steps:
     - name: Checkout
       id: checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.1.0
 
     - name: Configure node
       id: configure-node
       uses: actions/setup-node@v4
       with:
-        node-version: 22
+        node-version: 20
 
     - name: Install PNPM
       id: install-pnpm
