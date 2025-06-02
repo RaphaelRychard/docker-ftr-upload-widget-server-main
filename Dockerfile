@@ -1,6 +1,6 @@
 # --------------------- BASE -------------------------
 # Imagem base com Node + pnpm instalado globalmente
-FROM node:20 AS base
+FROM node:22 AS base
 
 RUN npm i -g pnpm
 
@@ -17,6 +17,7 @@ COPY package.json pnpm-lock.yaml ./
 
 # Instala dependências (inclusive devDependencies)
 RUN pnpm install
+
 
 # --------------------- BUILD ------------------------
 # Etapa de build da aplicação
@@ -36,9 +37,10 @@ RUN pnpm build
 # Remove dependências de desenvolvimento
 RUN pnpm prune --prod
 
+
 # -------------------- DEPLOY ------------------------
 # Imagem extremamente enxuta e segura usando distroless
-FROM node:20-alpine3.18 AS deploy
+FROM gcr.io/distroless/nodejs20-debian12 AS deploy
 
 # Define usuário não root para segurança (USER 1000)
 USER 1000
