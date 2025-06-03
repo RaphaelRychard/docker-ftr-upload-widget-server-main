@@ -1,5 +1,5 @@
 # --------------------- BASE -------------------------
-# Imagem base com Node + pnpm instalado globalmente
+# Imagem base com Node 22 + pnpm global
 FROM node:22 AS base
 
 RUN npm i -g pnpm
@@ -9,13 +9,10 @@ RUN npm i -g pnpm
 # Instala apenas as dependências
 FROM base AS dependencies
 
-# Diretório de trabalho dentro do container
 WORKDIR /usr/src/app
 
-# Copia arquivos de definição de dependências
 COPY package.json pnpm-lock.yaml ./
 
-# Instala dependências (inclusive devDependencies)
 RUN pnpm install
 
 
@@ -25,36 +22,28 @@ FROM base AS build
 
 WORKDIR /usr/src/app
 
-# Copia todo o código fonte
 COPY . .
 
-# Copia node_modules da etapa de dependências
 COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 
-# Build do projeto (gera ./dist)
 RUN pnpm build
 
-# Remove dependências de desenvolvimento
 RUN pnpm prune --prod
 
 
 # -------------------- DEPLOY ------------------------
-# Imagem extremamente enxuta e segura usando distroless
-FROM gcr.io/distroless/nodejs20-debian12 AS deploy
+# Imagem de produção enxuta e segura usando Node slim
+FROM node:22-slim AS deploy
 
-# Define usuário não root para segurança (USER 1000)
-USER 1000
+# Define usuário não root para segurança
+USER node
 
-# Define diretório de trabalho dentro do container
 WORKDIR /usr/src/app
 
-# Copia apenas os arquivos necessários para execução
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/package.json ./package.json
 
-# Expõe a porta que a aplicação roda dentro do container
 EXPOSE 3333
 
-# Comando que roda a aplicação no container
 CMD ["node", "dist/server.mjs"]
