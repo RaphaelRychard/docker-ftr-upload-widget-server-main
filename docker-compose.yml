@@ -11,6 +11,9 @@ services:
       - POSTGRES_DB=widget-server
     volumes:
       - db:/var/lib/postgresql/data
+    networks:
+      - widget
+      - db
 
   app: 
     build: .
@@ -22,6 +25,15 @@ services:
       - CLOUDFLARE_SECRET_ACCESS_KEY=#
       - CLOUDFLARE_BUCKET=#
       - CLOUDFLARE_PUBLIC_URL=http://localhost
+    networks:
+      - widget
   
-  volumes:
-    db:
+  
+volumes:
+  db:
+networks:
+  widget:
+    driver: bridge
+  db:
+    driver: bridge
+
