@@ -1,4 +1,15 @@
 services:
+  
+  dh:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - 6032:6032
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=widget-server
+
   app: 
     build: .
     ports: 
