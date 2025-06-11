@@ -57,4 +57,4 @@ COPY --from=build /usr/src/app/package.json ./package.json
 EXPOSE 3333
 
 # Comando que roda a aplicação no container
-CMD ["node", "dist/server.mjs"]
+CMD ["dist/server.mjs"]
